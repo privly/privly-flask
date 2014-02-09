@@ -11,6 +11,11 @@ class Post(Model):
     random_token = Column(Text)
     privly_application = Column(String(100))
 
+    def __init__(self, content, burn_after, random_token, privly_application):
+        self.content = content
+        self.burn_after = burn_after
+        self.random_token = random_token
+        self.privly_application = privly_application
 
 
 class User(Model):
@@ -22,3 +27,10 @@ class User(Model):
     salt = Column(String(100))
     created = Column(DateTime)
     updated = Column(DateTime)
+
+    def __init__(self, email, password, salt, created, updated):
+        self.email = email
+        self.password = password
+        self.salt = salt
+        self.created = created
+        self.updated = updated
