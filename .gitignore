@@ -27,3 +27,6 @@ pip-log.txt
 
 # Ignore user config
 pyvly/config.py
+
+# Ignore the test database
+test.db
