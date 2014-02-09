@@ -1,4 +1,7 @@
+from  datetime import datetime
+
 from sqlalchemy import Column, Integer, String, DateTime, Text
+
 from pyvly.database import Model
 
 
@@ -28,9 +31,9 @@ class User(Model):
     created = Column(DateTime)
     updated = Column(DateTime)
 
-    def __init__(self, email, password, salt, created, updated):
+    def __init__(self, email, password, salt):
         self.email = email
         self.password = password
         self.salt = salt
-        self.created = created
-        self.updated = updated
+        self.created = datetime.now()
+        self.updated = self.created
