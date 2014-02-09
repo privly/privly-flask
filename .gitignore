@@ -24,3 +24,6 @@ pip-log.txt
 
 # Ignore vim swaps
 *.swp
+
+# Ignore user config
+pyvly/config.py
