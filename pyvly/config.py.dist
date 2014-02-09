@@ -1,1 +1,6 @@
 DATABASE_URL = ""
+
+# Post API config
+RANDOM_TOKEN_LENGTH = 8
+POST_LIFETIME_MAX = 99999999 # This value is in seconds
+
