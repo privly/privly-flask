@@ -25,7 +25,7 @@ Create a post.
 
 POST /posts
 
-**Parameters**  
+**Parameters**
 
 **post[content]** - string - Optional
 
@@ -43,10 +43,7 @@ Structured content is for the storage of serialized JSON in the database.
 
 **post[privly\_application]** - string - Optional
 
-* Values: Any of the currently supported Privly application identifiers can
-be set here. Current examples include "PlainPost" and "ZeroBin", but no
-validation is performed on the string. It is only used to generate URLs
-into the static folder of the server.
+* Values: Any of the currently supported Privly application identifiers can be set here. Current examples include "PlainPost" and "ZeroBin", but no validation is performed on the string. It is only used to generate URLs into the static folder of the server.
 * Default: None
 
 **post[public]** - boolean - Optional
@@ -62,8 +59,7 @@ A public post is viewable by any user.
 * Default: A random sequence of Base64 characters
 
 The random token is used to permission requests to content
-not owned by the requesting user. It ensures the user has access to the link,
-and not didn't crawl the resource identifiers.
+not owned by the requesting user. It ensures the user has access to the link, and not didn't crawl the resource identifiers.
 
 **post[seconds\_until\_burn]** - integer - Optional
 
@@ -81,16 +77,16 @@ is ignored.
 * Example: "2014-02-08T13:37:00Z"
 * Default: 30 days from the current date
 
-If this parameter is not specified, the server will generate a date. 
+If this parameter is not specified, the server will generate a date.
 
 Time is stored and delivered in UTC.
 
-The day after which the content will be destroyed. The combined day, 
+The day after which the content will be destroyed. The combined day,
 month, and year must be within the next 14 days for users with
 posting permission, or 2 days for users without posting permission.
 
 
-**Response Headers**  
+**Response Headers**
 
 * X-Privly-Url The URL for this content which should be posted to other
 websites.
@@ -101,10 +97,10 @@ Viewing Content
 
 Shows an individual post. The "owning user" is the user who created the original content behind the link. The owning user will be the only one with access to metadata for the post.
 
-GET: /posts/:id.:format
+GET: /posts/:id
 
 Example:
-    
+
     {"created_at":"2012-09-05T04:08:31Z", // when the content was created (owning user only)
      "burn_after_date":"2012-09-19T04:08:31Z", // when the content will be destroyed
      "public":false, // whether everyone has read permission
@@ -120,7 +116,7 @@ Example:
      "permissions":{ //current user's permissions on contents
        canshow: true,
        canupdate: false,
-       candestroy: false, 
+       candestroy: false,
        canshare: false}
     }
 
@@ -129,7 +125,7 @@ Example:
 **random_token** - string - Required
 
 * Values: Any string of non-whitespace characters
-* Default: None 
+* Default: None
 
 Either the user owns the post, or they must supply this parameter.
 Without this parameter, even with complete share access to the content,
@@ -144,22 +140,22 @@ websites.
 Updating Content
 ----------------
 
-Update a post. Requires update permission or content ownership. 
+Update a post. Requires update permission or content ownership.
 
-PUT /posts/:id  
-PUT /posts/:id.:format
+PUT /posts/:id
+PUT /posts/:id
 
 **id** - integer - Required
 
 * Values: 0 to 9999999
-* Default: None 
+* Default: None
 
 The identifier of the post.
 
 **random\_token** - string - Required
 
 * Values: Any string of non-whitespace characters
-* Default: None 
+* Default: None
 
 Either the user owns the post, or they must supply this parameter.
 Without this parameter, even with complete share access to the content,
@@ -168,21 +164,21 @@ the user will not be able to access this endpoint.
 **post[content]** - string - Optional
 
 * Values: Any Markdown formatted string. No images supported.
-* Default: nil 
+* Default: None
 
 The content is rendered on the website, or for injection into web pages.
 
 **post [structured\_content]** - JSON - Optional
 
 * Values: Any JSON document
-* Default: nil
+* Default: None
 
 Structured content is for the storage of serialized JSON in the database.
 
 **post[public]** - boolean - Optional
 
 * Values: true, false
-* Default: nil
+* Default: None
 
 A public post is viewable by any user.
 
@@ -197,7 +193,7 @@ and not didn't crawl the resource identifiers.
 **post [seconds\_until\_burn]** - integer - Optional
 
 * Values: 1 to 99999999
-* Default: nil
+* Default: None
 
 The number of seconds until the post is destroyed.
 If this parameter is specified, then the burn\_after\_date
@@ -237,22 +233,22 @@ Destroying Content
 
 Destroy a post. Requires destroy permission, or content ownership.
 
-DELETE /posts/:id  
-DELETE /posts/:id.:format
+DELETE /posts/:id
+DELETE /posts/:id
 
-**Parameters**  
+**Parameters**
 
 **id** - integer - Required
 
 * Values: 0 to 9999999
-* Default: None 
+* Default: None
 
 The identifier of the post.
 
 **random\_token** - string - Required
 
 * Values: Any string of non-whitespace characters
-* Default: None 
+* Default: None
 
 Either the user owns the post, or they must supply this parameter.
 Without this parameter, even with complete share access to the content,
@@ -261,4 +257,4 @@ the user will not be able to access this endpoint.
 
 
 
- 
+
