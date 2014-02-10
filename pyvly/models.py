@@ -1,6 +1,8 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey
+from sqlalchemy.orm import relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from pyvly.database import Model
@@ -14,6 +16,8 @@ class Post(Model):
     burn_after = Column(DateTime)
     random_token = Column(Text)
     privly_application = Column(String(100))
+    user_id = Column(Integer, ForeignKey('user.id'), unique=False)
+    user = relationship('User', backref='posts')
 
     def __init__(self, content, burn_after, random_token, privly_application):
         self.content = content
