@@ -1,19 +1,11 @@
 from Crypto.Random import random
 from datetime import datetime, timedelta
 
-from flask import Blueprint, request, current_app as app
+from flask import Blueprint, request, current_app as app, jsonify
 
+from pyvly import helpers
 
 bp = Blueprint(__name__)
-
-def generate_token(length=32):
-    """
-    Generates a random token containing a-zA-Z0-9
-    Crypto.Random may be a bad choice, consider switching to os.urandom:
-    http://stackoverflow.com/a/20469525/263132
-    """
-    pool = range(48, 57) + range(65, 90) + range(97, 122)
-    return ''.join(chr(random.choice(pool)) for _ in range(length))
 
 
 @bp.route('/', methods=['POST'])
@@ -22,11 +14,13 @@ def create():
     Create a post.
     """
 
-    # Check if client defined a random token, if not generate one
-    if 'random_token' in request.form:
-        random_token = request.form['random_token']
-    else:
-        random_token = generate_token(app.config['RANDOM_TOKEN_LENGTH']
+    if app.config['USE_RANDOM_TOKEN']:
+        # Check if client defined a random token, if not generate one
+        if 'random_token' in request.form:
+            random_token = request.form['random_token']
+        else:
+            random_token = helpers.generate_token(
+                app.config['RANDOM_TOKEN_LENGTH'])
 
     # Create burn after date based off client paramters or generate one
     today = datetime.today()
@@ -34,7 +28,8 @@ def create():
         burn_after = timedelta(seconds=request.form['seconds_until_burn']) + \
             today
     else:
-        burn_after = timedelta(seconds=app.config['POST_LIFETIME_MAX'])
+        burn_after = timedelta(seconds=app.config['POST_LIFETIME_MAX']) + \
+            today
 
     # Set the privly application, use "PlainPost" as default
     if 'privly_application' in request.form:
@@ -50,9 +45,33 @@ def create():
     )
     try:
         # Try to save
-
         post.save()
     except:
         pass
+
+    # Create JSON response
+    response = jsonify(status='created', location=post)
+    response.headers['X-Privly-Url'] = helpers.privly_URL(post)
+    return response
+
+@bp.route('/<id>', methods=['PUT'])
+def update(id):
+    # Load the post out of the database
+    post = Post.get(id)
+
+    # If the server is using random_tokens and it's provided, update
+    if app.config['USE_RANDOM_TOKEN'] and 'random_token' in request.form:
+        post.random_token = request.form['random_token']
+
+    # If `seconds_until_burn` is sent, update the `burn_after` date
+    if 'seconds_until_burn' in request.form:
+        post.burn_after = datetime.today() + \
+            timedelta(seconds=request.form['seconds_until_burn'])
+
+    # If the `privly_application` string is sent, update the post
+    if 'privly_application' in request.form:
+       post.privly_application = request.form['privly_application']
+
+    return jsonify(json=post)
 
 
