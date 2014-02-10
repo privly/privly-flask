@@ -3,10 +3,24 @@ from datetime import datetime, timedelta
 
 from flask import Blueprint, request, current_app as app, jsonify
 
-from pyvly import helpers
+from pyvly import helpers, database
 
-bp = Blueprint(__name__)
+bp = Blueprint('posts', __name__)
 
+@bp.route('/', methods=['GET'])
+def get_posts():
+    """
+    Get all a user's posts
+    """
+    return jsonify(user.posts)
+
+@bp.route('/<int:id', methods=['GET'])
+def get_post(id):
+    """
+    Gets a single user's post
+    """
+    post = user.get_post(id)
+    return jsonify(post)
 
 @bp.route('/', methods=['POST'])
 def create():
@@ -56,6 +70,10 @@ def create():
 
 @bp.route('/<id>', methods=['PUT'])
 def update(id):
+    """
+    Update a Post
+    """
+
     # Load the post out of the database
     post = Post.get(id)
 
