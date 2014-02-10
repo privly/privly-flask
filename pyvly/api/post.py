@@ -92,4 +92,27 @@ def update(id):
 
     return jsonify(json=post)
 
+@bp.route('/<int:id>', methods=['DELETE'])
+def destroy(id):
+    """
+    Deletes a user's Post
+    """
+    post = Post.get(id)
+
+    post.delete()
+
+    return jsonify(success=True)
+
+@bp.route('/destroy_all', methods=['DELETE'])
+def destroy_all():
+    """
+    Delete all user's Posts
+    """
+    for post in user.posts:
+        post.delete(False)
+
+    database.db_session.commit()
+
+    return jsonify(success=True)
+
 
