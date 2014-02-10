@@ -1,3 +1,4 @@
+import urllib
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, ForeignKey
@@ -9,6 +10,12 @@ from pyvly.database import Model
 
 
 class Post(Model):
+    """
+    Posts are the central storage endpoint for Privly content.
+    Currently two posting applications use the Post endpoint: ZeroBins push
+    encrypted content to the serialized JSON storage, and Privly "posts" use
+    the rendered Markdown storage.
+    """
     __tablename__ = 'post'
 
     id = Column(Integer, primary_key=True)
@@ -25,6 +32,12 @@ class Post(Model):
         self.random_token = random_token
         self.privly_application = privly_application
 
+    def url_paramters(self):
+        """Get the parameters for the non-data URL parts of the model"""
+        return urllib.urlencode(dict(
+            privlyApp=self.privly_application,
+            random_token=self.random_token,
+            privlyInject1=True))
 
 class User(Model):
     __tablename__ = 'user'
@@ -38,6 +51,7 @@ class User(Model):
     confirmation_token = Column(String)
     verified = Column(Boolean, default=False)
 
+<<<<<<< HEAD
     def __init__(self, email, password, token):
         self.email = email
         self.password = generate_password_hash(password=password,
@@ -49,3 +63,11 @@ class User(Model):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+=======
+    def __init__(self, email, password, salt, created, updated):
+        self.email = email
+        self.password = password
+        self.salt = salt
+        self.created = created
+        self.updated = updated
+>>>>>>> added method to format post url parameters
