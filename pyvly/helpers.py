@@ -15,17 +15,16 @@ def create_user(email, passwd):
     db_session.add(u)
     db_session.commit()
 
+# Generate a _POOL of ASCII char-codes for a-z A-Z 0-9
+_POOL = range(48, 57) + range(65, 90) + range(97, 122)
 
 def generate_token(length=32):
     """
-    Generates a random token containing a-zA-Z0-9
+    Generates a random token containing a-z A-Z 0-9 of size `length`
     Crypto.Random may be a bad choice, consider switching to os.urandom:
     http://stackoverflow.com/a/20469525/263132
     """
-    # Generate pool of possible characters
-    pool = range(48, 57) + range(65, 90) + range(97, 122)
-    # Create a string of random characters from the pool of size `length`
-    return ''.join(chr(random.choice(pool)) for _ in range(length))
+    return ''.join(chr(random.choice(_POOL)) for _ in range(length))
 
 
 def privly_URL(post):
