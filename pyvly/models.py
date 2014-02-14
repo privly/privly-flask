@@ -1,7 +1,8 @@
 from  datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Text
+from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean
 
+from pyvly.helpers import generate_token
 from pyvly.database import Model
 
 
@@ -30,6 +31,8 @@ class User(Model):
     salt = Column(String(100))
     created = Column(DateTime)
     updated = Column(DateTime)
+    confirmation_token = Column(String)
+    verified = Column(Boolean, default=False)
 
     def __init__(self, email, password, salt):
         self.email = email
@@ -37,3 +40,4 @@ class User(Model):
         self.salt = salt
         self.created = datetime.now()
         self.updated = self.created
+        self.confirmation_token = helpers.generate_token(64)
