@@ -1,0 +1,3 @@
+[submodule "pyvly/static/privly-applications"]
+	path = pyvly/static/privly-applications
+	url = https://github.com/privly/privly-applications.git
