@@ -2,6 +2,7 @@ from Crypto.Random import random
 from datetime import datetime, timedelta
 
 from flask import Blueprint, request, current_app as app, jsonify
+from flask.ext.login import current_user as user
 
 from pyvly import helpers, database
 
@@ -14,7 +15,7 @@ def get_posts():
     """
     return jsonify(user.posts)
 
-@bp.route('/<int:id', methods=['GET'])
+@bp.route('/<int:id>', methods=['GET'])
 def get_post(id):
     """
     Gets a single user's post
