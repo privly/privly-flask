@@ -26,11 +26,21 @@ class Post(Model):
     user_id = Column(Integer, ForeignKey('user.id'), unique=False)
     user = relationship('User', backref='posts')
 
-    def __init__(self, content, burn_after, random_token, privly_application):
+    def __init__(self,
+                 content,
+                 burn_after,
+                 random_token,
+                 privly_application,
+                 user):
         self.content = content
         self.burn_after = burn_after
         self.random_token = random_token
         self.privly_application = privly_application
+        self.user = user
+
+    @classmethod
+    def get_user_post(self, user, id):
+        return self.query.filter_by(user=user, id=id).first()        
 
     def url_paramters(self):
         """Get the parameters for the non-data URL parts of the model"""
