@@ -1,6 +1,19 @@
 from Crypto.Random import random
 from flask import current_app as app
 
+from pyvly.database import db_session
+from pyvly.models import User
+
+
+def create_user(email, passwd):
+    """
+    Create user account
+    """
+    u = User(email=email, password=passwd)
+    db_session.add(u)
+    db_session.commit()
+
+
 def generate_token(length=32):
     """
     Generates a random token containing a-zA-Z0-9
@@ -11,6 +24,7 @@ def generate_token(length=32):
     pool = range(48, 57) + range(65, 90) + range(97, 122)
     # Create a string of random characters from the pool of size `length`
     return ''.join(chr(random.choice(pool)) for _ in range(length))
+
 
 def privly_URL(post):
     """
