@@ -9,7 +9,9 @@ def create_user(email, passwd):
     """
     Create user account
     """
-    u = User(email=email, password=passwd)
+    u = User(email=email,
+             password=passwd,
+             token=generate_token(64))
     db_session.add(u)
     db_session.commit()
 
