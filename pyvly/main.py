@@ -8,7 +8,7 @@ from pyvly.api import post
 app = Flask(__name__)
 
 
-app.register_blueprint(post.bp, '/posts')
+app.register_blueprint(post.bp, url_prefix='/posts')
 
 class ExtensibleJSONEncoder(simplejson.JSONEncoder):
     """A JSON encoder that will check for a .__json__ method on objects."""
