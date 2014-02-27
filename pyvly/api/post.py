@@ -1,7 +1,7 @@
 from Crypto.Random import random
 from datetime import datetime, timedelta
 
-from flask import Blueprint, request, current_app as app, jsonify
+from flask import Blueprint, request, current_app as app, jsonify, abort
 from flask.ext.login import current_user as user
 
 from pyvly import helpers, database
@@ -21,6 +21,8 @@ def get_post(id):
     Gets a single user's post
     """
     post = user.get_post(id)
+    if not post:
+        abort(403)
     return jsonify(post)
 
 @bp.route('/', methods=['POST'])
@@ -56,7 +58,8 @@ def create():
     post = Post(
         random_token=random_token,
         burn_after=burn_after,
-        privly_application=privly_application
+        privly_application=privly_application,
+        user=user
     )
     try:
         # Try to save
@@ -76,7 +79,10 @@ def update(id):
     """
 
     # Load the post out of the database
-    post = Post.get(id)
+    post = Post.get_user_post(user, id)
+
+    if not post:
+        abort(403)
 
     # If the server is using random_tokens and it's provided, update
     if app.config['USE_RANDOM_TOKEN'] and 'random_token' in request.form:
@@ -99,6 +105,9 @@ def destroy(id):
     Deletes a user's Post
     """
     post = Post.get(id)
+
+    if not post:
+        abort(403)
 
     post.delete()
 
