@@ -39,3 +39,7 @@ Model.db_session = db_session
 
 # Attach query property to all models
 Model.query = db_session.query_property()
+
+def init_db():
+    from pyvly import models
+    Model.metadata.create_all(bind=engine)
