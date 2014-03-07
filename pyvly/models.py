@@ -1,6 +1,7 @@
-from  datetime import datetime
+from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Text
+from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from pyvly.database import Model
 
@@ -30,10 +31,17 @@ class User(Model):
     salt = Column(String(100))
     created = Column(DateTime)
     updated = Column(DateTime)
+    confirmation_token = Column(String)
+    verified = Column(Boolean, default=False)
 
-    def __init__(self, email, password, salt):
+    def __init__(self, email, password, token):
         self.email = email
-        self.password = password
-        self.salt = salt
+        self.password = generate_password_hash(password=password,
+                                               method='pbkdf2:sha512',
+                                               salt_length=128)
         self.created = datetime.now()
         self.updated = self.created
+        self.confirmation_token = token
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
