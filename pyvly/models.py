@@ -1,7 +1,8 @@
 import urllib
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, 
+    ForeignKey
 from sqlalchemy.orm import relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -60,7 +61,6 @@ class User(Model):
     confirmation_token = Column(String)
     verified = Column(Boolean, default=False)
 
-<<<<<<< HEAD
     def __init__(self, email, password, token):
         self.email = email
         self.password = generate_password_hash(password=password,
@@ -72,11 +72,4 @@ class User(Model):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
-=======
-    def __init__(self, email, password, salt, created, updated):
-        self.email = email
-        self.password = password
-        self.salt = salt
-        self.created = created
-        self.updated = updated
->>>>>>> added method to format post url parameters
+
