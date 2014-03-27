@@ -1,9 +1,11 @@
-from flask import Blueprint, redirect, url_for, request, abort, jsonify
+from flask import Blueprint, redirect, url_for, request, abort
 from flask.ext.login import login_user, logout_user, current_user as user, \
     login_required
 
 from pyvly.forms import UserForm, csrf
+from pyvly.helpers import jsonify
 from pyvly.models import User
+
 
 bp = Blueprint('user', __name__)
 
@@ -38,12 +40,11 @@ def login():
         abort(400)
 
     user = User.get_by_email(request.form['user[email]'])
-
     if user and user.check_password(request.form['user[password]']):
         login_user(user)
-        return jsonify(dict(success=True))
+        return jsonify(success=True)
 
-    return jsonify(dict(success=False, errors=['Login Failed']))
+    return jsonify(success=False, errors=['Login Failed'])
 
 
 @bp.route('/sign_out')
@@ -51,7 +52,7 @@ def login():
 @csrf.exempt
 def logout():
     logout_user()
-    return jsonify(dict(success=True))
+    return jsonify(success=True))
 
 
 @bp.route('/reset_password')
