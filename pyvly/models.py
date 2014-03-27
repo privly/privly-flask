@@ -25,6 +25,7 @@ class Post(Model):
     random_token = Column(Text)
     privly_application = Column(String(100))
     created_at = Column(DateTime)
+    updated_at = Column(DateTime)
     public = Column(Boolean)
     user_id = Column(Integer, ForeignKey('user.id'), unique=False)
     user = relationship('User', backref='posts')
@@ -45,12 +46,13 @@ class Post(Model):
         self.user = user
         self.public = public
         self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
     @classmethod
     def get_user_post(self, user, id):
         return self.query.filter_by(user=user, id=id).first()        
 
-    def url_paramters(self):
+    def url_parameters(self):
         """Get the parameters for the non-data URL parts of the model"""
         return urllib.urlencode(dict(
             privlyApp=self.privly_application,
@@ -59,10 +61,15 @@ class Post(Model):
 
     def __json__(self):
         return dict(
-                burn_after=self.burn_after,
+                burn_after=self.burn_after.strftime(''),
+                created_at=self.created_at.strftime(''),
+                updated_at=self.updated_at.strftime(''),
                 random_token=self.random_token,
                 privly_application=self.privly_application,
-                content=self.content
+                content=self.content,
+                structured_content=self.structured_content,
+                public=self.public,
+                user_id=self.user_id
             )
 
 class User(Model):
@@ -97,6 +104,9 @@ class User(Model):
 
     def is_anonymous(self):
         return False
+
+    def is_authenticated(self):
+        return True
 
     def get_id(self):
         return unicode(self.id)
