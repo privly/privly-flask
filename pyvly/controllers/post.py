@@ -15,7 +15,7 @@ def user_account_data():
     """
     Get user's account data
     """
-    return jsonify(dict(csrf=generate_csrf(),
+    return helpers.jsonify(dict(csrf=generate_csrf(),
                         burntAfter='2014-04-26T02:48:39+00:00',
                         canPost=True,
                         signedIn=False if user.is_anonymous() else True))
@@ -25,7 +25,13 @@ def get_posts():
     """
     Get all a user's posts
     """
-    return jsonify(user.posts)
+    posts = []
+    for post in user.posts:
+        data = post.__json__()
+        data['privly_URL'] = helpers.privly_URL(post)
+        posts.append(data)
+
+    return helpers.jsonify(posts)
 
 @bp.route('/<int:id>', methods=['GET'])
 def get_post(id):
@@ -35,7 +41,7 @@ def get_post(id):
     post = user.get_post(id)
     if not post:
         abort(403)
-    return jsonify(post)
+    return helpers.jsonify(post)
 
 @bp.route('', methods=['POST'])
 def create():
@@ -81,7 +87,7 @@ def create():
         pass
 
     # Create JSON response
-    response = jsonify(status='created', location=post)
+    response = helpers.jsonify(status='created', location=post)
     response.headers['X-Privly-Url'] = helpers.privly_URL(post)
     return response
 
@@ -110,7 +116,7 @@ def update(id):
     if 'privly_application' in request.form:
        post.privly_application = request.form['privly_application']
 
-    return jsonify(json=post)
+    return helpers.jsonify(json=post)
 
 @bp.route('/<int:id>', methods=['DELETE'])
 def destroy(id):
@@ -124,7 +130,7 @@ def destroy(id):
 
     post.delete()
 
-    return jsonify(success=True)
+    return helpers.jsonify(success=True)
 
 @bp.route('/destroy_all', methods=['DELETE'])
 def destroy_all():
@@ -136,6 +142,6 @@ def destroy_all():
 
     database.db_session.commit()
 
-    return jsonify(success=True)
+    return helpers.jsonify(success=True)
 
 
