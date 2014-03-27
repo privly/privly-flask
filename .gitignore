@@ -26,7 +26,7 @@ pip-log.txt
 *.swp
 
 # Ignore user config
-pyvly/config.py
+config.py
 
 # Ignore the test database
 test.db
