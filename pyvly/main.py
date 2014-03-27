@@ -1,11 +1,25 @@
 import simplejson
-from flask import Flask
 
+from flask import Flask
+from flask.ext.login import LoginManager
+from flask_wtf.csrf import CsrfProtect
 
 from pyvly.controllers import post, user
-
+from pyvly.models import User
 
 app = Flask(__name__)
+
+app.config.from_object('config')
+
+CsrfProtect(app)
+
+login_manager = LoginManager()
+
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(userid):
+    return User.get(userid)
 
 
 app.register_blueprint(post.bp, url_prefix='/posts')
