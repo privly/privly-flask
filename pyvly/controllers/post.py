@@ -6,9 +6,19 @@ from flask.ext.login import current_user as user
 
 from pyvly import helpers, database
 
-bp = Blueprint('posts', __name__)
+bp = Blueprint('post', __name__)
 
-@bp.route('/', methods=['GET'])
+@bp.route('/user_account_data')
+def user_account_data():
+    """
+    Get user's account data
+    """
+    return jsonify(dict(csrf='csrf', 
+                        burntAfter='2014-04-26T02:48:39+00:00',
+                        canPost=True,
+                        signedIn=True))
+
+@bp.route('', methods=['GET'])
 def get_posts():
     """
     Get all a user's posts
