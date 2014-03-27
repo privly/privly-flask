@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, url_for, request, abort, jsonify
 from flask.ext.login import login_user, logout_user, current_user as user, \
     login_required
 
-from pyvly.forms import UserForm
+from pyvly.forms import UserForm, csrf
 from pyvly.models import User
 
 bp = Blueprint('user', __name__)
@@ -48,6 +48,7 @@ def login():
 
 @bp.route('/sign_out')
 @login_required
+@csrf.exempt
 def logout():
     logout_user()
     return jsonify(dict(success=True))
