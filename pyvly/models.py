@@ -23,6 +23,8 @@ class Post(Model):
     burn_after = Column(DateTime)
     random_token = Column(Text)
     privly_application = Column(String(100))
+    created_at = Column(DateTime)
+    public = Column(Boolean)
     user_id = Column(Integer, ForeignKey('user.id'), unique=False)
     user = relationship('User', backref='posts')
 
@@ -31,12 +33,15 @@ class Post(Model):
                  burn_after,
                  random_token,
                  privly_application,
+                 public,
                  user):
         self.content = content
         self.burn_after = burn_after
         self.random_token = random_token
         self.privly_application = privly_application
         self.user = user
+        self.public = public
+        self.created_at = datetime.now()
 
     @classmethod
     def get_user_post(self, user, id):
@@ -48,6 +53,14 @@ class Post(Model):
             privlyApp=self.privly_application,
             random_token=self.random_token,
             privlyInject1=True))
+
+    def __json__(self):
+        return dict(
+                burn_after=self.burn_after,
+                random_token=self.random_token,
+                privly_application=self.privly_application,
+                content=self.content
+            )
 
 class User(Model):
     __tablename__ = 'user'

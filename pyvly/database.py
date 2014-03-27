@@ -10,7 +10,7 @@ class BaseModel(object):
 
     @classmethod
     def get(self, id):
-
+        """Get a model by it's PK"""
         return self.query.filter(self.id == id).first()
 
     def save(self, commit=True):
