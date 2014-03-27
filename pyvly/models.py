@@ -58,7 +58,7 @@ class User(Model):
     salt = Column(String(100))
     created = Column(DateTime)
     updated = Column(DateTime)
-    confirmation_token = Column(String)
+    confirmation_token = Column(String(100))
     verified = Column(Boolean, default=False)
 
     def __init__(self, email, password, token):
