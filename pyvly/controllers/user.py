@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, url_for, request, abort, jsonify
-from flask.ext.login import login_user, current_user as user
+from flask.ext.login import login_user, logout_user, current_user as user, \
+    login_required
 
 from pyvly.forms import UserForm
 from pyvly.models import User
@@ -46,9 +47,10 @@ def login():
 
 
 @bp.route('/sign_out')
-#@login_required
+@login_required
 def logout():
-    return 'logout'
+    logout_user()
+    return jsonify(dict(success=True))
 
 
 @bp.route('/reset_password')

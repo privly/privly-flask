@@ -3,8 +3,10 @@ from datetime import datetime, timedelta
 
 from flask import Blueprint, request, current_app as app, jsonify, abort
 from flask.ext.login import current_user as user
+from flask_wtf.csrf import generate_csrf
 
 from pyvly import helpers, database
+from pyvly.models import Post
 
 bp = Blueprint('post', __name__)
 
@@ -13,10 +15,10 @@ def user_account_data():
     """
     Get user's account data
     """
-    return jsonify(dict(csrf='csrf', 
+    return jsonify(dict(csrf=generate_csrf(),
                         burntAfter='2014-04-26T02:48:39+00:00',
                         canPost=True,
-                        signedIn=True))
+                        signedIn=False if user.is_anonymous() else True))
 
 @bp.route('', methods=['GET'])
 def get_posts():
@@ -35,12 +37,12 @@ def get_post(id):
         abort(403)
     return jsonify(post)
 
-@bp.route('/', methods=['POST'])
+@bp.route('', methods=['POST'])
 def create():
     """
     Create a post.
     """
-
+    random_token = None
     if app.config['USE_RANDOM_TOKEN']:
         # Check if client defined a random token, if not generate one
         if 'random_token' in request.form:
@@ -51,21 +53,22 @@ def create():
 
     # Create burn after date based off client paramters or generate one
     today = datetime.today()
-    if 'seconds_until_burn' in request.form:
-        burn_after = timedelta(seconds=request.form['seconds_until_burn']) + \
+    if 'post[seconds_until_burn]' in request.form:
+        burn_after = timedelta(seconds=int(request.form['post[seconds_until_burn]'])) + \
             today
     else:
         burn_after = timedelta(seconds=app.config['POST_LIFETIME_MAX']) + \
             today
 
     # Set the privly application, use "PlainPost" as default
-    if 'privly_application' in request.form:
-        privly_application = request.form['privly_application']
+    if 'post[privly_application]' in request.form:
+        privly_application = request.form['post[privly_application]']
     else:
         privly_application = "PlainPost"
 
     # Create the Post
     post = Post(
+        content=request.form['post[content]'],
         random_token=random_token,
         burn_after=burn_after,
         privly_application=privly_application,
