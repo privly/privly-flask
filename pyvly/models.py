@@ -69,6 +69,10 @@ class User(Model):
         self.updated = self.created
         self.confirmation_token = token
 
+    @classmethod
+    def get_by_email(cls, email):
+        return cls.query.filter(cls.email == email).first()
+
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
