@@ -1,19 +1,18 @@
 from Crypto.Random import random
-from flask import current_app as app
+from flask import current_app as app, json, request
+
 
 from pyvly.database import db_session
 from pyvly.models import User
 
 
 def create_user(email, passwd):
-    """
-    Create user account
-    """
-    u = User(email=email,
+    """Create user account"""
+    user = User(email=email,
              password=passwd,
              token=generate_token(64))
-    db_session.add(u)
-    db_session.commit()
+    user.save()
+    return user
 
 # Generate a _POOL of ASCII char-codes for a-z A-Z 0-9
 _POOL = range(48, 57) + range(65, 90) + range(97, 122)
@@ -43,3 +42,15 @@ def privly_URL(post):
     # The Privly application url for injection
     return '%s://%s/apps/%s/show?%s&privlyDataURL=%s' %\
         (config + (post.privly_application, post.url_parameters(), data_url))
+
+def jsonify(*args, **kwargs):
+    'Improved json response factory'
+    indent = None
+    data = args[0] if args else dict(kwargs)
+   
+    if app.config['JSONIFY_PRETTYPRINT_REGULAR'] \
+       and not request.is_xhr:
+        indent = 2
+    return app.response_class(json.dumps(data,
+        indent=indent),
+        mimetype='application/json')
