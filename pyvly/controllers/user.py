@@ -1,8 +1,10 @@
-from flask import Blueprint, redirect, url_for
+from flask import Blueprint, redirect, url_for, request, abort, jsonify
+from flask.ext.login import login_user, current_user as user
 
 from pyvly.forms import UserForm
+from pyvly.models import User
 
-bp = Blueprint(__name__)
+bp = Blueprint('user', __name__)
 
 
 @bp.route('/register', methods=['GET', 'POST'])
@@ -27,13 +29,24 @@ def verify():
     return "verify"
 
 
-@bp.route('/login')
+@bp.route('/sign_in', methods=['POST'])
 def login():
-    return "login"
+    """Log the user into the server"""
+    if 'user[password]' not in request.form \
+        or 'user[email]' not in request.form:
+        abort(400)
+
+    user = User.get_by_email(request.form['user[email]'])
+
+    if user and user.check_password(request.form['user[password]']):
+        login_user(user)
+        return jsonify(dict(success=True))
+
+    return jsonify(dict(success=False, errors=['Login Failed']))
 
 
-@bp.route('/logout')
-@login_required
+@bp.route('/sign_out')
+#@login_required
 def logout():
     return 'logout'
 
@@ -41,3 +54,6 @@ def logout():
 @bp.route('/reset_password')
 def reset_password():
     return "In progress"
+
+
+
