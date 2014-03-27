@@ -55,7 +55,6 @@ class User(Model):
     id = Column(Integer, primary_key=True)
     email = Column(String(255), unique=True)
     password = Column(Text)
-    salt = Column(String(100))
     created = Column(DateTime)
     updated = Column(DateTime)
     confirmation_token = Column(String(100))
