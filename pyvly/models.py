@@ -60,10 +60,11 @@ class Post(Model):
             privlyInject1=True))
 
     def __json__(self):
+        fmt = '%m-%d-%YT%H:%M:%SZ'
         return dict(
-                burn_after=self.burn_after.strftime(''),
-                created_at=self.created_at.strftime(''),
-                updated_at=self.updated_at.strftime(''),
+                burn_after=self.burn_after.strftime(fmt),
+                created_at=self.created_at.strftime(fmt),
+                updated_at=self.updated_at.strftime(fmt),
                 random_token=self.random_token,
                 privly_application=self.privly_application,
                 content=self.content,
