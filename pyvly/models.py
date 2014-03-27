@@ -20,6 +20,7 @@ class Post(Model):
 
     id = Column(Integer, primary_key=True)
     content = Column(Text)
+    structured_content = Column(Text)
     burn_after = Column(DateTime)
     random_token = Column(Text)
     privly_application = Column(String(100))
@@ -30,12 +31,14 @@ class Post(Model):
 
     def __init__(self,
                  content,
+                 structured_content,
                  burn_after,
                  random_token,
                  privly_application,
                  public,
                  user):
         self.content = content
+        self.structured_content = structured_content
         self.burn_after = burn_after
         self.random_token = random_token
         self.privly_application = privly_application
