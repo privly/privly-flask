@@ -1,10 +1,8 @@
 from flask.ext.script import Manager
 
-from pyvly import helpers
-from pyvly.database import init_db as idb
-from pyvly.main import app
+from pyvly import helpers, database, main
 
-manager = Manager(app)
+manager = Manager(main.app)
 
 
 @manager.option('-e', '--email', required=True, help="User's email address")
@@ -14,7 +12,7 @@ def create_user(email, password):
 
 @manager.command
 def init_db():
-    idb()
+    database.init_db()
 
 
 if __name__ == '__main__':
