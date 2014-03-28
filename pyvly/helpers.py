@@ -36,7 +36,7 @@ def privly_URL(post):
     config = (app.config['REQUIRED_PROTOCOL'], app.config['LINK_DOMAIN_HOST'])
 
     # The data URL for accessing the Post data
-    data_url = '%s://%s/posts/%s,json?random_token=%s' %\
+    data_url = '%s://%s/posts/%s?random_token=%s' %\
         (config + (post.id, post.random_token))
 
     # The Privly application url for injection

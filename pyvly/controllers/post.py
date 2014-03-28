@@ -34,6 +34,7 @@ def get_posts():
     return helpers.jsonify(posts)
 
 @bp.route('/<int:id>', methods=['GET'])
+@bp.route('/<int:id>.json', methods=['GET'])
 def get_post(id):
     """
     Gets a single user's post

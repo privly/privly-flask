@@ -52,7 +52,7 @@ def login():
 @csrf.exempt
 def logout():
     logout_user()
-    return jsonify(success=True))
+    return jsonify(success=True)
 
 
 @bp.route('/reset_password')
