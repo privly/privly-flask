@@ -1,3 +1,4 @@
+import datetime
 from Crypto.Random import random
 from datetime import datetime, timedelta
 
@@ -145,6 +146,8 @@ def update(id):
         post.content = request.form['post[content]']
     if 'post[structured_content]' in request.form:
         post.structured_content = request.form['post[structured_content]']
+
+    post.updated = datetime.now()
 
     # Save and update
     post.save()
