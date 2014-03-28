@@ -62,7 +62,7 @@ class Post(Model):
     def __json__(self):
         fmt = '%m-%d-%YT%H:%M:%SZ'
         return dict(
-                burn_after=self.burn_after.strftime(fmt),
+                burn_after_date=self.burn_after.strftime(fmt),
                 created_at=self.created_at.strftime(fmt),
                 updated_at=self.updated_at.strftime(fmt),
                 random_token=self.random_token,
@@ -96,6 +96,9 @@ class User(Model):
     @classmethod
     def get_by_email(cls, email):
         return cls.query.filter(cls.email == email).first()
+        
+    def get_post(self, id):
+        return Post.query.filter_by(user=self, id=id).first()
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
