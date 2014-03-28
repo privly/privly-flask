@@ -19,10 +19,11 @@ class Post(Model):
     __tablename__ = 'post'
 
     id = Column(Integer, primary_key=True)
+    random_id = Column(String(100), unique=True)
+    random_token = Column(Text)
     content = Column(Text)
     structured_content = Column(Text)
     burn_after = Column(DateTime)
-    random_token = Column(Text)
     privly_application = Column(String(100))
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
@@ -31,17 +32,19 @@ class Post(Model):
     user = relationship('User', backref='posts')
 
     def __init__(self,
+                 random_id,
+                 random_token,
                  content,
                  structured_content,
                  burn_after,
-                 random_token,
                  privly_application,
                  public,
                  user):
+        self.random_id = random_id
+        self.random_token = random_token
         self.content = content
         self.structured_content = structured_content
         self.burn_after = burn_after
-        self.random_token = random_token
         self.privly_application = privly_application
         self.user = user
         self.public = public
@@ -49,8 +52,12 @@ class Post(Model):
         self.updated_at = datetime.now()
 
     @classmethod
-    def get_user_post(self, user, id):
-        return self.query.filter_by(user=user, id=id).first()        
+    def get_user_post(cls, user, id):
+        return cls.query.filter_by(user=user, id=id).first()        
+
+    @classmethod
+    def get_post(cls, post_id):
+        return cls.query.filter_by(random_id=post_id).first()
 
     def url_parameters(self):
         """Get the parameters for the non-data URL parts of the model"""
@@ -73,7 +80,7 @@ class Post(Model):
                 user_id=self.user_id,
                 permissions=dict(
                     canupdate=permission,
-                    candelete=permission,
+                    candestroy=permission,
                     canshare=permission,
                     canshow=True)
             )

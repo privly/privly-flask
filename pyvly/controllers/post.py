@@ -33,16 +33,17 @@ def get_posts():
 
     return helpers.jsonify(posts)
 
-@bp.route('/<int:id>', methods=['GET'])
-@bp.route('/<int:id>.json', methods=['GET'])
+@bp.route('/<id>', methods=['GET'])
+@bp.route('/<id>.json', methods=['GET'])
 def get_post(id):
     """
     Gets a single user's post
     """
-    post = user.get_post(id)
+    post = Post.get_post(id)
     if not post:
         abort(403)
-    return helpers.jsonify(post)
+
+    return helpers.jsonify(post.__json__(user.get_id() == post.user.get_id()))
 
 @bp.route('', methods=['POST'])
 def create():
@@ -52,8 +53,8 @@ def create():
     random_token = None
     if app.config['USE_RANDOM_TOKEN']:
         # Check if client defined a random token, if not generate one
-        if 'random_token' in request.form:
-            random_token = request.form['random_token']
+        if 'post[random_token]' in request.form:
+            random_token = request.form['post[random_token]']
         else:
             random_token = helpers.generate_token(
                 app.config['RANDOM_TOKEN_LENGTH'])
@@ -73,12 +74,22 @@ def create():
     else:
         privly_application = "PlainPost"
 
-    # Create the Post
+    
+    content, structured = (None, None)
+    if 'post[content]' in request.form:
+        content = request.form['post[content]']
+    if 'post[structured_content]' in request.form:
+        structured = request.form['post[structured_content']
+
+    # Create the Post    
     post = Post(
-        content=request.form['post[content]'],
-        random_token=random_token,
+        random_id=helpers.generate_token(app.config['RANDOM_ID_LENGTH']),
+        random_token=random_token, 
+        content=content,
+        structured_content=structured,
         burn_after=burn_after,
         privly_application=privly_application,
+        public=True,
         user=user
     )
     try:
@@ -127,12 +138,12 @@ def update(id):
 
     return helpers.jsonify(post)
 
-@bp.route('/<int:id>', methods=['DELETE'])
+@bp.route('/<id>', methods=['DELETE'])
 def destroy(id):
     """
     Deletes a user's Post
     """
-    post = Post.get(id)
+    post = Post.get_post(id)
 
     if not post:
         abort(403)

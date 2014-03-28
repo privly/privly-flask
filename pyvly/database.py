@@ -21,7 +21,7 @@ class BaseModel(object):
 
     def delete(self, commit=True):
         """Removes a model from the database"""
-        db_session.remove(self)
+        db_session.delete(self)
         if commit:
             db_session.commit()
 
