@@ -25,7 +25,7 @@ Installing Server
 
 ## Add a user
 
-        python manage.py create_user -e user@example.com -p password
+        python manage.py create_user -e development@priv.ly -p password
 
 Running Tests
 =============
