@@ -1,7 +1,7 @@
 import simplejson
 
-from flask import Flask
-from flask.ext.login import LoginManager
+from flask import Flask, redirect
+from flask.ext.login import LoginManager, current_user
 
 from pyvly.controllers import post, user
 from pyvly.forms import csrf
@@ -39,3 +39,8 @@ class ExtensibleJSONEncoder(simplejson.JSONEncoder):
 # Override Flask's json encoder to check for __json__ method on objects
 app.json_encoder = ExtensibleJSONEncoder
 
+@app.route('/')
+def index():
+    if current_user.is_anonymous():
+        return redirect('/static/privly-applications/Login/new.html')
+    return redirect('/static/privly-applications/Index/new.html')
