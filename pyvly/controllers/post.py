@@ -43,6 +43,11 @@ def get_post(id):
     if not post:
         abort(403)
 
+    if app.config['USE_RANDOM_TOKEN'] and \
+        ('random_token' not in request.args or
+        request.args.get('random_token') != post.random_token):
+        abort(403)
+
     return helpers.jsonify(post.__json__(user.get_id() == post.user.get_id()))
 
 @bp.route('', methods=['POST'])
@@ -69,17 +74,15 @@ def create():
             today
 
     # Set the privly application, use "PlainPost" as default
+    privly_application = "PlainPost"
     if 'post[privly_application]' in request.form:
         privly_application = request.form['post[privly_application]']
-    else:
-        privly_application = "PlainPost"
-
-    
+        
     content, structured = (None, None)
     if 'post[content]' in request.form:
         content = request.form['post[content]']
     if 'post[structured_content]' in request.form:
-        structured = request.form['post[structured_content']
+        structured = request.form['post[structured_content]']
 
     # Create the Post    
     post = Post(
@@ -115,18 +118,23 @@ def update(id):
     if not post:
         abort(403)
 
+    if app.config['USE_RANDOM_TOKEN'] and \
+            ('random_token' not in request.args or
+            request.args.get('random_token') != post.random_token):
+            abort(403)
+    
     # If the server is using random_tokens and it's provided, update
-    if app.config['USE_RANDOM_TOKEN'] and 'random_token' in request.form:
-        post.random_token = request.form['random_token']
+    if app.config['USE_RANDOM_TOKEN'] and 'post[random_token]' in request.form:
+        post.random_token = request.form['post[random_token]']
 
     # If `seconds_until_burn` is sent, update the `burn_after` date
-    if 'seconds_until_burn' in request.form:
+    if 'post[seconds_until_burn]' in request.form:
         post.burn_after = datetime.today() + \
-            timedelta(seconds=int(request.form['seconds_until_burn']))
+            timedelta(seconds=int(request.form['post[seconds_until_burn]']))
 
     # If the `privly_application` string is sent, update the post
-    if 'privly_application' in request.form:
-        post.privly_application = request.form['privly_application']
+    if 'post[privly_application]' in request.form:
+        post.privly_application = request.form['post[privly_application]']
 
     if 'post[content]' in request.form:
         post.content = request.form['post[content]']
@@ -143,9 +151,14 @@ def destroy(id):
     """
     Deletes a user's Post
     """
-    post = Post.get_post(id)
+    post = Post.get_user_post(user, id)
 
     if not post:
+        abort(403)
+
+    if app.config['USE_RANDOM_TOKEN'] and \
+        ('random_token' not in request.args or
+        request.args.get('random_token') != post.random_token):
         abort(403)
 
     post.delete()
