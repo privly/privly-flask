@@ -41,20 +41,26 @@ def privly_URL(post):
     data_url = '%s://%s/posts/%s?random_token=%s' %\
         (config + (post.random_id, post.random_token))
 
+    # Properly format injection URL parameters
     inject_params = post.url_parameters()
     inject_params['privlyDataURL'] = data_url
+
     # The Privly application url for injection
     return '%s://%s/apps/%s/show?%s' %\
         (config + (post.privly_application, urllib.urlencode(inject_params)))
 
 def jsonify(*args, **kwargs):
-    'Improved json response factory'
+    """Improved json response factory"""
     indent = None
+    # Check for an argument passed, otherwise dict() the kwargs
     data = args[0] if args else dict(kwargs)
-   
+    
+    # Format pretty print if enabled
     if app.config['JSONIFY_PRETTYPRINT_REGULAR'] \
        and not request.is_xhr:
         indent = 2
+        
+    # Send JSON response
     return app.response_class(json.dumps(data,
         indent=indent),
         mimetype='application/json')

@@ -25,12 +25,14 @@ class BaseModel(object):
         if commit:
             db_session.commit()
 
+
+# Create declarative base Model for database objects
 Model = declarative_base(name="Model", cls=BaseModel)
 
 # Create database engine
 engine = create_engine(DATABASE_URL, convert_unicode=True)
 
-# Create our db session
+# Create our scoped database session and bind to the engine
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
@@ -41,5 +43,6 @@ Model.db_session = db_session
 Model.query = db_session.query_property()
 
 def init_db():
+    """Create all the tables for the models in the database"""
     from pyvly import models
     Model.metadata.create_all(bind=engine)

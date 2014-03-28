@@ -51,11 +51,13 @@ class Post(Model):
         self.updated_at = datetime.now()
 
     @classmethod
-    def get_user_post(cls, user, id):
-        return cls.query.filter_by(user=user, random_id=id).first()        
+    def get_user_post(cls, user, random_id):
+        """Retrieve a post by user and id"""
+        return cls.query.filter_by(user=user, random_id=random_id).first()        
 
     @classmethod
     def get_post(cls, post_id):
+        """Retrieve a post by it's post_id"""
         return cls.query.filter_by(random_id=post_id).first()
 
     def url_parameters(self):
@@ -106,12 +108,11 @@ class User(Model):
 
     @classmethod
     def get_by_email(cls, email):
+        """Retrieve a user by email"""
         return cls.query.filter(cls.email == email).first()
 
-    def get_post(self, id):
-        return Post.query.filter_by(user=self, id=id).first()
-
     def check_password(self, password):
+        """Check a user's password (includes salt)"""
         return check_password_hash(self.password, password)
 
     def is_active(self):

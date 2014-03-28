@@ -33,24 +33,29 @@ def verify():
 
 
 @bp.route('/sign_in', methods=['POST'])
-def login():
+def sign_in():
     """Log the user into the server"""
+    # Check for the correct form data to be submitted
     if 'user[password]' not in request.form \
         or 'user[email]' not in request.form:
         abort(400)
 
+    # Get the user and check the password
     user = User.get_by_email(request.form['user[email]'])
     if user and user.check_password(request.form['user[password]']):
+        # If the user and credentials are valid, log the user in
         login_user(user)
         return jsonify(success=True)
 
+    # Something went wrong
     return jsonify(success=False, errors=['Login Failed'])
 
 
-@bp.route('/sign_out')
+@bp.route('/sign_out', methods=['POST'])
 @login_required
 @csrf.exempt
-def logout():
+def sign_out():
+    """Log the user out"""
     logout_user()
     return jsonify(success=True)
 
