@@ -15,10 +15,10 @@ def user_account_data():
     """
     Get user's account data
     """
-    return helpers.jsonify(dict(csrf=generate_csrf(),
-                        burntAfter='2014-04-26T02:48:39+00:00',
-                        canPost=True,
-                        signedIn=False if user.is_anonymous() else True))
+    return helpers.jsonify(csrf=generate_csrf(),
+                           burntAfter='2014-04-26T02:48:39+00:00',
+                           canPost=True,
+                           signedIn=False if user.is_anonymous() else True)
 
 @bp.route('', methods=['GET'])
 def get_posts():
@@ -111,13 +111,21 @@ def update(id):
     # If `seconds_until_burn` is sent, update the `burn_after` date
     if 'seconds_until_burn' in request.form:
         post.burn_after = datetime.today() + \
-            timedelta(seconds=request.form['seconds_until_burn'])
+            timedelta(seconds=int(request.form['seconds_until_burn']))
 
     # If the `privly_application` string is sent, update the post
     if 'privly_application' in request.form:
-       post.privly_application = request.form['privly_application']
+        post.privly_application = request.form['privly_application']
 
-    return helpers.jsonify(json=post)
+    if 'post[content]' in request.form:
+        post.content = request.form['post[content]']
+
+    if 'post[structured_content]' in request.form:
+        post.structured_content = request.form['post[structured_content]']
+
+    post.save()
+
+    return helpers.jsonify(post)
 
 @bp.route('/<int:id>', methods=['DELETE'])
 def destroy(id):
