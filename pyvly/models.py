@@ -66,7 +66,7 @@ class Post(Model):
             privlyInject1=True)
 
     def __json__(self, permission=True):
-        fmt = '%m-%d-%YT%H:%M:%SZ'
+        fmt = '%Y-%m-%dT%H:%M:%SZ'
         return dict(
                 burn_after_date=self.burn_after.strftime(fmt),
                 created_at=self.created_at.strftime(fmt),
