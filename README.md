@@ -20,7 +20,7 @@ Installing Server
 1. source env/bin/activate
 1. pip install -r requirements.txt
 1. cp config.py.dist config.py
-1. python managy.py init_db
+1. python manage.py init_db
 1. python manage.py runserver
 
 ## Add a user
