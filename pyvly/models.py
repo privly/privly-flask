@@ -59,7 +59,7 @@ class Post(Model):
             random_token=self.random_token,
             privlyInject1=True))
 
-    def __json__(self):
+    def __json__(self, permission=True):
         fmt = '%m-%d-%YT%H:%M:%SZ'
         return dict(
                 burn_after_date=self.burn_after.strftime(fmt),
@@ -70,7 +70,12 @@ class Post(Model):
                 content=self.content,
                 structured_content=self.structured_content,
                 public=self.public,
-                user_id=self.user_id
+                user_id=self.user_id,
+                permissions=dict(
+                    canupdate=permission,
+                    candelete=permission,
+                    canshare=permission,
+                    canshow=True)
             )
 
 class User(Model):
@@ -96,7 +101,7 @@ class User(Model):
     @classmethod
     def get_by_email(cls, email):
         return cls.query.filter(cls.email == email).first()
-        
+
     def get_post(self, id):
         return Post.query.filter_by(user=self, id=id).first()
 
