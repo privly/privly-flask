@@ -1,4 +1,3 @@
-import urllib
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, \
@@ -53,7 +52,7 @@ class Post(Model):
 
     @classmethod
     def get_user_post(cls, user, id):
-        return cls.query.filter_by(user=user, id=id).first()        
+        return cls.query.filter_by(user=user, random_id=id).first()        
 
     @classmethod
     def get_post(cls, post_id):
@@ -61,10 +60,10 @@ class Post(Model):
 
     def url_parameters(self):
         """Get the parameters for the non-data URL parts of the model"""
-        return urllib.urlencode(dict(
+        return dict(
             privlyApp=self.privly_application,
             random_token=self.random_token,
-            privlyInject1=True))
+            privlyInject1=True)
 
     def __json__(self, permission=True):
         fmt = '%m-%d-%YT%H:%M:%SZ'

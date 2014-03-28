@@ -1,3 +1,5 @@
+import urllib
+
 from Crypto.Random import random
 from flask import current_app as app, json, request
 
@@ -6,11 +8,11 @@ from pyvly.database import db_session
 from pyvly.models import User
 
 
-def create_user(email, passwd):
+def create_user(email, password):
     """Create user account"""
     user = User(email=email,
-             password=passwd,
-             token=generate_token(64))
+                password=password,
+                token=generate_token(64))
     user.save()
     return user
 
@@ -39,9 +41,11 @@ def privly_URL(post):
     data_url = '%s://%s/posts/%s?random_token=%s' %\
         (config + (post.random_id, post.random_token))
 
+    inject_params = post.url_parameters()
+    inject_params['privlyDataURL'] = data_url
     # The Privly application url for injection
-    return '%s://%s/apps/%s/show?%s&privlyDataURL=%s' %\
-        (config + (post.privly_application, post.url_parameters(), data_url))
+    return '%s://%s/apps/%s/show?%s' %\
+        (config + (post.privly_application, urllib.urlencode(inject_params)))
 
 def jsonify(*args, **kwargs):
     'Improved json response factory'
