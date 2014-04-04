@@ -1,6 +1,6 @@
 from flask.ext.script import Manager
 
-from pyvly import helpers, database, main
+from pyvly import helpers, database, main, models
 
 
 # Initialize the manager
@@ -17,6 +17,14 @@ def create_user(email, password):
 def init_db():
     """Intializes the Database"""
     database.init_db()
+
+@manager.command
+def seed_db():
+    users = ['admin', 'demostration', 'development']
+    for name in users:
+        user = models.User(name + '@priv.ly', 'password', helpers.generate_token())
+        user.save()
+
 
 # Run the manager when called directly
 if __name__ == '__main__':
