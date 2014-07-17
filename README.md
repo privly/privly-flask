@@ -49,7 +49,7 @@ These shell commands step through a standard installation.
     # Install depedencies and run
     python manage.py init_db # Creates the database
     python manage.py seed_db # Seed the database
-    python manage,py runserver # Starts the server
+    python manage.py runserver # Starts the server
 
 ## Testing the Server
 
