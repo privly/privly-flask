@@ -40,6 +40,11 @@ These shell commands step through a standard installation.
     git clone --recursive https://github.com/privly/privly-flask.git
     cd privly-flask
     
+    # Create a virtualenv and install requirements
+    virtualenv env/pyvly
+    source env/pyvly/bin/activate
+    pip install -r requirements.txt
+
     # You need to setup config. For a development install you should use
     # since you will not need to setup MySQL.
     cp config.py.dist config.py
