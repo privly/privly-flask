@@ -18,7 +18,6 @@ This server currently supports:
 
 * All the applications found in the [Privly Applications](https://github.com/privly/privly-applications) repository.
 * Serialized JSON storage for any text content.
-* Sharing by email, domain, and IP Address.
 
 **Server API**  
 
