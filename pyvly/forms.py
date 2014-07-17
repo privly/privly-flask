@@ -12,3 +12,4 @@ class RegistrationForm(Form):
         validators.Required(),
         validators.EqualTo('confirm', message='Passwords must match')
     ])
+    confirm = PasswordField('Repeat Password')
