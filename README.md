@@ -22,7 +22,7 @@ This server currently supports:
 
 **Server API**  
 
-Read about the [API].
+Read about the [API](https://github.com/privly/privly-web/blob/master/API.md).
 
 ## Development Server Installation ##
 
