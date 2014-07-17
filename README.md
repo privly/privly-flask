@@ -61,17 +61,6 @@ From the projects root directory, run:
 
 The seed command (run with `python manage.py seed_db`) will create several users for you in development, including: `admin@priv.ly`, `demonstration@priv.ly`, `development@priv.ly`. All these accounts have the same password, `password`. 
 
-**User Account States**  
-User accounts could be in one of several states:
-
-1. **Signed up for an invitation:** When a user submits their email to the invitation form, they do not automatically get an active account. You can invite the user via the administrative interface, or a user who has invitation credits can invite the user at a later date.
-1. **Invited:** A user who has been invited by an administrator or a user with invitation credits has been "invited." They need to verify their email address before they may begin creating content.
-1. **Can Post:** The user can create content on the server. This is usually the state after the user has verified their email address and has paid whatever toll they need to support hosting expenses.
-1. **Can't Post:** In order to create new content on the server, a user must have posting permission. You will only generally use this option if the user is abusing the content server or not contributing enough to hosting costs. There is no option for locking a user account completely, because they should maintain access to content they have already created.
-
-**Retrieving User Account Activation Tokens**  
-You can retrieve emails when you are running a development server by examining the web server's log.
-
 ## Testing/Submitting Bugs ##
 
 If you have discovered a bug, only [open a public issue](https://github.com/privly/privly-flask/issues/new) on GitHub if it could not possibly be a security related bug. If the bug affects the security of the system, please report it privately at [privly.org](http://www.privly.org/content/bug-report). If it is an urgent issue, please email privly@privly.org. We will then fix the bug and follow a process of responsible disclosure.
@@ -109,5 +98,3 @@ Contact the Nick "[spectralsun](https://github.com/spectralsun)" or "[smcgregor]
 
 **Issue**:  
 If you [open an issue](https://github.com/privly/privly-flask/issues) on this repository, you'll get someone's attention.
-
-
