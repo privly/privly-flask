@@ -43,8 +43,8 @@ These shell commands step through a standard installation.
     
     # You need to setup config. For a development install you should use
     # since you will not need to setup MySQL.
-        cp config.py.dist config.py
-        vim config.py # or use the editor of your choice on the config 
+    cp config.py.dist config.py
+    vim config.py # or use the editor of your choice on the config 
     
     # Install depedencies and run
     python manage.py init_db # Creates the database
