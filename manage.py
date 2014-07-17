@@ -23,7 +23,7 @@ def init_db():
 def seed_db():
     users = ['admin', 'demostration', 'development']
     for name in users:
-        user = models.User(name + '@priv.ly', 'password', helpers.generate_token())
+        user = models.User(name + '@priv.ly', 'password')
         user.save()
 
 
