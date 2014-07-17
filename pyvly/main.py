@@ -42,8 +42,8 @@ app.json_encoder = ExtensibleJSONEncoder
 @app.route('/')
 def index():
     if current_user.is_anonymous():
-        return redirect('/static/privly-applications/Login/new.html')
-    return redirect('/static/privly-applications/Index/new.html')
+        return redirect(app.config['PRIVLY_LOGIN'])
+    return redirect(app.config['PRIVLY_INDEX'])
 
 @app.route('/pages/privacy')
 def privacy():
