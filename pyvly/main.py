@@ -44,3 +44,7 @@ def index():
     if current_user.is_anonymous():
         return redirect('/static/privly-applications/Login/new.html')
     return redirect('/static/privly-applications/Index/new.html')
+
+@app.route('/pages/privacy')
+def privacy():
+    return 'Privacy Statement'
