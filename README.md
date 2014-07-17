@@ -29,8 +29,8 @@ Prerequisites:
 
 * Python 2.X
  * To check what version of Python you are running, type `python --version` in your terminal
-* Pip
-* Virtualenv 
+* [Pip](http://virtualenv.readthedocs.org/en/latest/)
+* [Virtualenv](http://virtualenv.readthedocs.org/en/latest/)
 
 These shell commands step through a standard installation.
 
