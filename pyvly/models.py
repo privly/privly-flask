@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from pyvly.database import Model
+from pyvly.helpers import generate_token
 
 
 class Post(Model):
