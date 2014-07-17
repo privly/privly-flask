@@ -3,18 +3,8 @@ import urllib
 from Crypto.Random import random
 from flask import current_app as app, json, request
 
-
 from pyvly.database import db_session
-from pyvly.models import User
 
-
-def create_user(email, password):
-    """Create user account"""
-    user = User(email=email,
-                password=password,
-                token=generate_token(64))
-    user.save()
-    return user
 
 # Generate a _POOL of ASCII char-codes for a-z A-Z 0-9
 _POOL = range(48, 57) + range(65, 90) + range(97, 122)
