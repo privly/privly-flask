@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from pyvly.database import Model
+from pyvly.helpers import generate_token
 
 
 class Post(Model):
@@ -97,14 +98,14 @@ class User(Model):
     confirmation_token = Column(String(100))
     verified = Column(Boolean, default=False)
 
-    def __init__(self, email, password, token):
+    def __init__(self, email, password):
         self.email = email
         self.password = generate_password_hash(password=password,
                                                method='pbkdf2:sha512',
                                                salt_length=128)
         self.created = datetime.now()
         self.updated = self.created
-        self.confirmation_token = token
+        self.confirmation_token = generate_token()
 
     @classmethod
     def get_by_email(cls, email):
