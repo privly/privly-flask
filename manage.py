@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from flask.ext.script import Manager
 
 from pyvly import helpers, database, main, models
