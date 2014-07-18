@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% from "form.html" import render_form %}
+
+{% block content %}
+    <form method="post" action="">
+        {{ render_form(form) }}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <button class="btn btn-default">
+            Register on <span class="location-host"></span>
+        </button>
+    </form>
+{% endblock %}

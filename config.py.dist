@@ -19,3 +19,7 @@ LINK_DOMAIN_HOST = 'localhost:5000'
 ## Flask Config
 DEBUG = True
 SECRET_KEY = "This key is not secret so you should probably change it"
+
+## Privly Static Appilcations
+PRIVLY_LOGIN = '/static/privly-applications/Login/new.html'
+PRIVLY_INDEX = '/static/privly-applications/Index/new.html'
