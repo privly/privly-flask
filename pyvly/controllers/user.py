@@ -1,30 +1,25 @@
-from flask import Blueprint, redirect, url_for, request, abort
+from flask import Blueprint, redirect, url_for, request, abort, flash, \
+    render_template
 from flask.ext.login import login_user, logout_user, current_user as user, \
     login_required
 
-from pyvly.forms import UserForm, csrf
+from pyvly.forms import RegistrationForm, csrf
 from pyvly.helpers import jsonify
 from pyvly.models import User
 
 
 bp = Blueprint('user', __name__)
 
-
 @bp.route('/register', methods=['GET', 'POST'])
-def create_user():
+def register():
     """Registration Page"""
-
-    form = UserForm()
-    if form.validate_on_submit():
-        # Grab the password from the form
-        data = form.data
-
-        # Create the user
-        helpers.create_user(data['email'], data['password'])
-
-        return redirect(url_for("login"))
-
-    return "register"
+    form = RegistrationForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user = User(form.email.data, form.password.data)
+        user.save()
+        flash('Thanks for registering')
+        return redirect('/')
+    return render_template('user/register.html', form=form)
 
 
 @bp.route('/confirm_account')
