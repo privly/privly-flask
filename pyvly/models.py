@@ -128,8 +128,8 @@ class User(Model):
     def get_id(self):
         return unicode(self.id)
 
-class AuthTokens(Model):
-	__tablename__ = "authtokens"
+class AuthToken(Model):
+	__tablename__ = "authtoken"
 
 	regular_token = Column(String)
 	crypto_token = Column(String)
