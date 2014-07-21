@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from pyvly.database import Model
-from pyvly.helpers import generate_token
+from pyvly.helpers import generate_token, generate_crypto_token
 
 
 class Post(Model):
@@ -127,3 +127,16 @@ class User(Model):
 
     def get_id(self):
         return unicode(self.id)
+
+class AuthTokens(Model):
+	__tablename__ = "authtokens"
+
+	regular_token = Column(String)
+	crypto_token = Column(String)
+	user_id = Column(Integer, ForeignKey(user.id))
+
+	def __init__(self, user_id):
+		self.user_id = user_id
+		self.regular_token = generate_token(32)
+		self.crypto_token = generate_crypto_token(self.regular_token)
+
