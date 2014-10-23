@@ -14,7 +14,7 @@ POST_LIFETIME_MAX = 99999999
 # Required protocol for Privly applications
 REQUIRED_PROTOCOL = 'http'
 # The domain of the PyVly server
-LINK_DOMAIN_HOST = 'localhost:5000'
+LINK_DOMAIN_HOST = 'localhost:3000'
 
 ## Flask Config
 DEBUG = True
