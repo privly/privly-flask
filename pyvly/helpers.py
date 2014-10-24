@@ -42,6 +42,7 @@ def privly_URL(post):
 def jsonify(*args, **kwargs):
     """Improved json response factory"""
     indent = None
+    status = kwargs.pop('_status', 200)
     # Check for an argument passed, otherwise dict() the kwargs
     data = args[0] if args else dict(kwargs)
     
@@ -53,4 +54,5 @@ def jsonify(*args, **kwargs):
     # Send JSON response
     return app.response_class(json.dumps(data,
         indent=indent),
+        status=status,
         mimetype='application/json')
