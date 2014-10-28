@@ -4,7 +4,9 @@ from Crypto.Random import random
 from flask import current_app as app, json, request
 
 from pyvly.database import db_session
+from pyvly.models import User
 
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 # Generate a _POOL of ASCII char-codes for a-z A-Z 0-9
 _POOL = range(48, 57) + range(65, 90) + range(97, 122)
@@ -17,6 +19,28 @@ def generate_token(length=32):
     """
     return ''.join(chr(random.choice(_POOL)) for _ in range(length))
 
+def generate_crypto_token(token, expires_in=600):
+	"""
+	Generates a cryptographically signed message as a token using 
+	itsdangerous
+	"""
+	s = Serializer (app.config['SECRET-KEY'])
+	return s.dumps({'crypto_token': token}) # Returns a string
+
+def verify_crypto_token(crypto_token):
+    s = Serializer(app.config['SECRET_KEY'])
+    try:
+        data = s.loads(crypto_token)
+    except SignatureExpired:
+        return None # Token is valid, but expired
+    except BadSignature:
+        return None # Invalid token
+    user = User.query.filter_by(token=data)
+    
+    if len(user) > 1:
+    	return None
+    else:
+    	return user.first()
 
 def privly_URL(post):
     """
