@@ -105,7 +105,7 @@ def create():
     post.save()
 
     # Create JSON response
-    response = helpers.jsonify(status='created', location=post)
+    response = helpers.jsonify(status='created', location=post, _status=201)
     response.headers['X-Privly-Url'] = helpers.privly_URL(post)
     return response
 
