@@ -131,10 +131,9 @@ class User(Model):
 class AuthToken(Model):
     __tablename__ = 'authtoken'
 
-    id = Column(Integer, primary_key=True)
     regular_token = Column(String)
     crypto_token = Column(String)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
 
     def __init__(self, user_id):
         self.user_id = user_id
