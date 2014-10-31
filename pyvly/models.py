@@ -134,6 +134,7 @@ class AuthToken(Model):
     regular_token = Column(String)
     crypto_token = Column(String)
     user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    user = relationship('User', backref='authtoken')
 
     def __init__(self, user_id):
         self.user_id = user_id
