@@ -4,9 +4,9 @@ from Crypto.Random import random
 from flask import current_app as app, json, request
 
 from pyvly.database import db_session
-from pyvly.models import User
 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+
 
 # Generate a _POOL of ASCII char-codes for a-z A-Z 0-9
 _POOL = range(48, 57) + range(65, 90) + range(97, 122)
