@@ -129,14 +129,15 @@ class User(Model):
         return unicode(self.id)
 
 class AuthToken(Model):
-	__tablename__ = "authtoken"
+    __tablename__ = 'authtoken'
 
-	regular_token = Column(String)
-	crypto_token = Column(String)
-	user_id = Column(Integer, ForeignKey(user.id))
+    id = Column(Integer, primary_key=True)
+    regular_token = Column(String)
+    crypto_token = Column(String)
+    user_id = Column(Integer, ForeignKey('user.id'))
 
-	def __init__(self, user_id):
-		self.user_id = user_id
-		self.regular_token = generate_token(32)
-		self.crypto_token = generate_crypto_token(self.regular_token)
+    def __init__(self, user_id):
+        self.user_id = user_id
+        self.regular_token = generate_token(32)
+        self.crypto_token = generate_crypto_token(self.regular_token)
 
