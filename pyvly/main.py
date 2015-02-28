@@ -9,7 +9,8 @@ from pyvly.models import User
 
 
 # Create the flask app
-app = Flask(__name__)
+app = Flask('pyvly', static_folder='static/privly-applications', 
+    static_url_path='/apps')
 
 # Initialize CSRF protection of POST and DELETE requests
 csrf.init_app(app)
