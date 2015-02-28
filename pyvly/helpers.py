@@ -60,7 +60,7 @@ def privly_URL(post):
     inject_params['privlyDataURL'] = data_url
 
     # The Privly application url for injection
-    return '%s://%s/apps/%s/show?%s' %\
+    return '%s://%s/apps/%s/show.html?%s' %\
         (config + (post.privly_application, urllib.urlencode(inject_params)))
 
 def jsonify(*args, **kwargs):
